@@ -1,0 +1,40 @@
+#!/bin/bash
+# ----- config-block { -----
+# Address that server is listen for tunnel connection.
+BIND_ADDR='0.0.0.0:2400'
+# Private key generated on server with `rathole --genkey`.
+LOCAL_PRIVATE_KEY='paste-private-key-here'
+
+# ID and TOKEN should be equal both on server and client.
+SERVICE_ID='first'
+SERVICE_TOKEN='BDm;ZG+8KQ'
+# Address which exposes tunnel on server side.
+# If you want expose server port directly, without gateway server like Caddy
+# then use 0.0.0.0 instead of localhost.
+SERVICE_BIND_ADDR='localhost:4201'
+# ----- } config-block -----
+
+mkdir /tmp/rathole
+cd /tmp/rathole
+
+sudo cat > default.toml <<EOF
+[server]
+bind_addr = "$BIND_ADDR"
+
+[server.transport]
+type = "noise"
+[server.transport.noise]
+local_private_key = "$LOCAL_PRIVATE_KEY"
+
+[server.services.$SERVICE_ID]
+token = "$SERVICE_TOKEN"
+bind_addr = "$SERVICE_BIND_ADDR"
+EOF
+
+sudo mkdir -p /etc/rathole/server/
+sudo mv default.toml /etc/rathole/server/
+sudo systemctl enable rathole@default --now
+
+rm -r /tmp/rathole
+
+echo "Rathole server installation completed."

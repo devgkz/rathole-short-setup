@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# Your server's public address for tunnel connect.
+REMOTE_ADDR='203.0.113.100:2400'
+# Public key generated on server with `rathole --genkey`.
+REMOTE_PUBLIC_KEY='paste-public-key-here'
+
+# ID and TOKEN should be equal both on server and client.
+SERVICE_ID='first'
+SERVICE_TOKEN='BDm;ZG+8KQ'
+# Address which your service listens on client side.
+SERVICE_LOCAL_ADDR='localhost:8080'
+
+mkdir /tmp/rathole
+cd /tmp/rathole
+
+sudo cat > default.toml <<EOF
+[client]
+remote_addr = "$REMOTE_ADDR"
+
+[client.transport]
+type = "noise"
+[client.transport.noise]
+remote_public_key = "$REMOTE_PUBLIC_KEY"
+
+[client.services.$SERVICE_ID]
+token = "$SERVICE_TOKEN"
+local_addr = "$SERVICE_LOCAL_ADDR"
+EOF
+
+sudo mkdir -p /etc/rathole/client/
+sudo mv default.toml /etc/rathole/client/
+sudo systemctl enable ratholec@default --now
+
+rm -r /tmp/rathole
+
+echo "Rathole client installation completed."
