@@ -2,7 +2,7 @@
 
 [Rathole](https://github.com/rapiz1/rathole) can help to expose the service on the device behind the NAT to the Internet, via a server with a public IP.
 
-This set of scripts that simplifies first setup of Rathole reverse proxy tunnel.
+This set of scripts simplifies first setup of Rathole reverse proxy tunnel.
 
 ## Features
 
