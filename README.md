@@ -1,4 +1,4 @@
-# First Rathole setup
+# Rathole short setup
 
 [Rathole](https://github.com/rapiz1/rathole) can help to expose the service on the device behind the NAT to the Internet, via a server with a public IP.
 
